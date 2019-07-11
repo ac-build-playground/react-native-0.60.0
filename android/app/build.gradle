@@ -148,6 +148,41 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
+
+    productFlavors {
+
+        prod {
+            applicationId "com.reactnative060.ui"
+            if (BUILD_FOR_APPCENTER=='false') {
+               // signingConfig signingConfigs.release
+            }
+        }
+        sqs {
+            applicationId "com.reactnative060.ui.sqs"
+            if (BUILD_FOR_APPCENTER=='false') {
+               // signingConfig signingConfigs.release
+            }
+        }
+        sqm {
+            applicationId "com.reactnative060.ui.sqm"
+            if (BUILD_FOR_APPCENTER=='false') {
+               // signingConfig signingConfigs.release
+            }
+        }
+        sqp {
+            applicationId "com.reactnative060.ui.sqp"
+            if (BUILD_FOR_APPCENTER=='false') {
+               // signingConfig signingConfigs.release
+            }
+        }
+        sln {
+            applicationId "com.reactnative060.ui.sln"
+            if (BUILD_FOR_APPCENTER=='false') {
+               // signingConfig signingConfigs.release
+            }
+        }
+    }
+
     // applicationVariants are e.g. debug, release
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
@@ -159,6 +194,56 @@ android {
                 output.versionCodeOverride =
                         versionCodes.get(abi) * 1048576 + defaultConfig.versionCode
             }
+        }
+    }
+
+    bundle {
+        language {
+            enableSplit = true
+        }
+        density {
+            enableSplit = true
+        }
+        abi {
+            enableSplit = true
+        }
+    }
+
+    splits {
+        abi {
+            reset()
+            enable enableSeparateBuildPerCPUArchitecture
+            universalApk false  // If true, also generate a universal APK
+            include 'armeabi-v7a','arm64-v8a','x86','x86_64'
+        }
+        buildTypes {
+            release {
+                minifyEnabled enableProguardInReleaseBuilds
+                proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+                if (BUILD_FOR_APPCENTER=='false') {
+                    // signingConfig signingConfigs.release
+                }
+            }
+        }
+        // applicationVariants are e.g. debug, release
+        applicationVariants.all { variant ->
+            variant.outputs.each { output ->
+            // For each separate APK per architecture, set a unique version code as described here:
+            // http://tools.android.com/tech-docs/new-build-system/user-guide/apk-splits
+            def versionCodes = ["armeabi-v7a":1, "x86":2, 'arm64-v8a':3, 'x86_64':4]
+            def abi = output.getFilter(OutputFile.ABI)
+            if (abi != null) {  // null for the universal-debug, universal-release variants
+                output.versionCodeOverride =
+                        versionCodes.get(abi) * 1048576 + defaultConfig.versionCode
+                }
+            }
+        }
+
+        dexOptions {
+            javaMaxHeapSize "4g"
+            dexInProcess = false
+            jumboMode = true
+            preDexLibraries = false
         }
     }
 }
