@@ -105,6 +105,8 @@ def enableProguardInReleaseBuilds = false
  */
 def useIntlJsc = false
 
+def BUILD_FOR_APPCENTER = 'true'
+
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
