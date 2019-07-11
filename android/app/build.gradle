@@ -110,6 +110,8 @@ def BUILD_FOR_APPCENTER = 'true'
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
+    flavorDimensions "default"
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
